@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const ToData = require('./data.js')
-const listing = require('../models/listing');
+const listing = require('../models/listing.js');
 
 main().then((res) => {
     console.log("it is connected to db")
@@ -18,3 +18,4 @@ const newdata = async ()=>{
     console.log("data was sucefully intilizedd")
 }
 newdata();
+

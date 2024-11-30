@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listing Page</title>
+</head>
+<body>
+    <h1>Showing All Listed Villas</h1>
+    <ul>
+        <% for (let listing of alllisting) { %>
+            <li>
+                <h4> <a  href="/listing/<%= listing._id %> " ><%= listing.title %></a></h4>
+            
+            </li>
+        <% } %>
+    </ul>   
+</body>
+</html>
