@@ -10,9 +10,12 @@
     <ul>
         <li><%= list.title %></li>
         <li><%= list.description %></li>
+        <li><%= list.image %></li>
         <li><%= list.price %></li>
         <li><%= list.location %></li>
         <li><%= list.country %></li>
     </ul>
+    <br><br>
+    <a href="/listing/<%= list._id %>/edit">edit the details</a>
 </body>
 </html>

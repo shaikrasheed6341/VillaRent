@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>edit ypu list</title>
+</head>
+<body>
+     <h1>edit ur  list </h1>
+     <h1>Edit Your List</h1>
+<form method="post" action="/listing/<%= list.id %>?_method=PUT">
+  <!-- Title -->
+  <label for="title">Title:</label>
+  <input name="listing[title]" <%= list.title %> type="text" required><br><br>
+
+  <!-- Description -->
+  <label for="description">Description:</label>
+  <input name="listing[description]" <%= list.description %> type="text" required><br><br>
+
+  <!-- Image URL -->
+  <label for="image">Image URL:</label>
+  <input name="listing[image]" <%= list.image.url %> type="text"><br><br>
+
+  <!-- Price -->
+  <label for="price">Price:</label>
+  <input name="listing[price]" <%= list.price %> type="number" required><br><br>
+
+  <!-- Location -->
+  <label for="location">Location:</label>
+  <input name="listing[location]" <%= list.location %> type="text" required><br><br>
+
+  <!-- Country -->
+  <label for="country">Country:</label>
+  <input name="listing[country]" value="<%= list.country %>" type="text" required><br><br>
+
+  <!-- Submit Button -->
+  <button type="submit">Edit</button>
+</form>
+ 
+</body>
+</html>
