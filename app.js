@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const listing = require('./models/listing')
 const path = require('path')
 const methodOverride = require('method-override')
+const ejsmate = require('ejs-mate')
 
 
 
@@ -26,7 +27,8 @@ async function main() {
 app.set('view engine', 'ejs');
 app.set("views", path.join(__dirname, 'views'));
 app.use(methodOverride("_method"));
-
+app.engine('ejs', ejsmate);
+app.use(express.static (path.join(__dirname,'/public')));
 
 
 
@@ -93,10 +95,18 @@ app.get('/listing/:id/edit',async(req,res)=>{
   res.render('listing/edit',{list})
 })
 //update
-app.put('/listing/:id',async(req,res)=>{
+app.put('/listing/:id', async (req, res) => {
   let { id } = req.params;
-  await listing.findByIdAndUpdate(id,{...req.body.list})
+  await listing.findByIdAndUpdate(id, { ...req.body.listing });
+  res.redirect(`/listing/${id}`); // Use backticks for template literals
+});
+//delete route
+app.delete('/listing/:id', async (req,res)=>{
+  let { id } = req.params;
+  let listdelete = await listing.findByIdAndDelete(id);
+  console.log(listdelete)
   res.redirect('/listing')
+
 })
 
 

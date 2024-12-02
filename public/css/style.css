@@ -1,0 +1,53 @@
+.navbar{
+    
+    height: 5rem;
+    background-color: rgb(255, 255, 255);
+}
+.fa-compass{
+    color: #D32F2F;
+    font-size: 2rem;
+
+}
+.nav-link{
+    color: rgb(0, 0, 0) !important;
+}
+.col-md-4{
+    height: 5rem  !important ;
+}
+.bi-envelope{
+ height: 1rem;
+}
+        /* Fixed size for the card container */
+        .card {
+            width: 20rem;
+        }
+
+        /* Fixed size for image container */
+        .card-img-wrapper {
+            width: 100%;
+            height: 300px; /* Keep this height consistent */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Images scaled to fit the container without distortion */
+        .card-img-top {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Crops the image while maintaining aspect ratio */
+        }
+    .custom-link {
+        text-decoration: none;
+        color: inherit; /* Optional: Keeps the link color the same as the surrounding text */
+      }
+      
+      .custom-link:hover {
+        text-decoration: underline; /* Optional: Adds an underline on hover for better UX */
+      }
+      /*this is about edit.ejs*/
+      /* General Reset */
+
+  
+  

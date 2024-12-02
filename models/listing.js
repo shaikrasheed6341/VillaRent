@@ -12,7 +12,7 @@ const listeingschema = new Schema({
     },
      image: {
         filename: { type: String, default : null},
-        url: { type: String } 
+        url: { type: String ,required : true} 
       },
     price: {
         type: Number,

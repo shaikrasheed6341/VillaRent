@@ -1,21 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>list show </title>
-</head>
+
+    
+    
+    <% layout("/layouts/boilerplate") %>
 <body>
-    <h3>your id is <%= list.id  %></h3>
-    <ul>
-        <li><%= list.title %></li>
-        <li><%= list.description %></li>
-        <li><%= list.image %></li>
-        <li><%= list.price %></li>
-        <li><%= list.location %></li>
-        <li><%= list.country %></li>
-    </ul>
-    <br><br>
-    <a href="/listing/<%= list._id %>/edit">edit the details</a>
+    
+    <div class="card mb-3" style="width: 1500px; padding: 20px; border: 2px solid #ddd; border-radius: 10px; margin-left: 50px;">
+        <!-- Added margin-left to shift the card -->
+        <div class="row g-0">
+            <div class="col-md-3 offset-md-1"> <!-- Offset added to move image to the right -->
+                <img src="<%= list.image.url %>" 
+                     class="img-fluid rounded-start" 
+                     alt="villa image" 
+                     style="width: 100%; height: auto; object-fit: cover;"> <!-- Kept height proportional -->
+            </div>
+            <div class="col-md-4 offset-md-1"> <!-- Offset added to move content to the right -->
+                <div class="card-body">
+                    <h4 class="card-title mb-1"> <!-- Added margin-bottom -->
+                        <%= list.title %>
+                    </h3>
+                    <h8 class="card-text d-block mb-2"> <!-- Added block display and margin-bottom -->
+                        <%= list.description %>
+                    </h8>
+                    <h6 class="mb-2">Location: <%= list.location %></h6> <!-- Added margin-bottom -->
+                    <h6 class="mb-2">Country: <%= list.country %></h6> <!-- Added margin-bottom -->
+                    <p class="card-text">
+                        <i class="fa-solid fa-indian-rupee-sign"></i> <b><%= list.price %></b>
+                    </p>
+                    <button type="button" class="btn btn-success">Booknow</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
-</html>
+
+    
+
+    
+
+    <br><br>
+    <a href="/listing/<%= list._id %>/edit">edit the details</a><br><br>
+    <form action="/listing/<%= list._id %>?_method=delete" method="post"><button>Delete</button></form>
+</body>
