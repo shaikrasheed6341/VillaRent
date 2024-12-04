@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const ToData = require('./data.js')
 const listing = require('../models/listing.js');
 
-main().then((res) => {
+main().then((res) => { 
     console.log("it is connected to db")
   }).catch(err => console.log(err));
   
