@@ -1,20 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Listing</title>
-</head>
-<body>
-    <h1>entre your details</h1>
-    <form method="post" action="/listing">
-        <input name="listing[title]" placeholder="Enter the villa name" type="text" required><br><br>
-        <input name="listing[description]" placeholder="Enter the description" type="text" required><br><br>
-        <input name="listing[image]" placeholder="Enter your villa image URL" type="text" ><br><br>
-        <input name="listing[price]" placeholder="Enter your price" type="number" required><br><br>
-        <input name="listing[location]" placeholder="Enter your location" type="text" required><br><br>
-        <input name="listing[country]" placeholder="Enter the area name" type="text" required><br><br>
-        <button type="submit">Add</button>
-    </form> 
+<% layout("/layouts/boilerplate") %>
+<body class="bg-light">
+    <div class="container py-2">
+        <div class="row justify-content-center">
+            <!-- Full-width column to increase card size -->
+            <div class="col-12 col-md-10 col-lg-8">
+                <div class="card shadow" style="width: 100%; padding: 1rem;">
+                    <div class="card-header text-center bg-dark text-white">
+                        <h3>Add New Listing</h3>
+                    </div>
+                    <div class="card-body ">
+                        <form method="post" action="/listing " novalidate  class="needs-validation"">
+                            <!-- Title -->
+                            <div class="mb-2">
+                                <label for="title" class="form-label"><b>Villa Name</b></label>
+                                <input name="listing[title]" placeholder="Enter the villa name" type="text" class="form-control" required><br>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="mb-2">
+                                <label for="description" class="form-label"><b>Description</b></label>
+                                <input name="listing[description]" placeholder="Enter the description" type="text" class="form-control" required><br>
+                            </div>
+
+                            <!-- Image URL -->
+                            <div class="mb-2">
+                                <label for="image" class="form-label"><b>Image URL</b></label>
+                                <input name="listing[image.url]" placeholder="Enter your villa image URL" type="text" class="form-control"><br>
+                            </div>
+
+                            <!-- Price -->
+                            <div class="mb-2">
+                                <label for="price" class="form-label"><b>Price</b></label>
+                                <input name="listing[price]" placeholder="Enter your price" type="number" class="form-control" required><br>
+                            </div>
+
+                            <!-- Location -->
+                            <div class="mb-2">
+                                <label for="location" class="form-label"><b>Location</b></label>
+                                <input name="listing[location]" placeholder="Enter your location" type="text" class="form-control" required><br>
+                            </div>
+
+                            <!-- Country -->
+                            <div class="mb-2">
+                                <label for="country" class="form-label"><b>Country</b></label>
+                                <input name="listing[country]" placeholder="Enter the area name" type="text" class="form-control" required><br>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-dark w-100">Add Listing</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
-</html>

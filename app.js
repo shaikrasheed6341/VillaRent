@@ -29,6 +29,7 @@ app.set("views", path.join(__dirname, 'views'));
 app.use(methodOverride("_method"));
 app.engine('ejs', ejsmate);
 app.use(express.static (path.join(__dirname,'/public')));
+app.use(express.static (path.join(__dirname,'/images')));
 
 
 
@@ -121,5 +122,5 @@ app.delete('/listing/:id', async (req,res)=>{
 
 
 
-app.get('/', (req, res) => res.send('Hello World!'));
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
