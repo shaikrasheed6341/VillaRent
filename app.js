@@ -4,6 +4,7 @@ const listing = require('./models/listing')
 const path = require('path')
 const methodOverride = require('method-override')
 const ejsmate = require('ejs-mate');
+const {reviewschema} =require('./schema')
 const Review = require('./models/review');
 
 
@@ -70,6 +71,17 @@ app.get('/listing/new', (req, res) => {
   res.render('listing/new.ejs')
 })
 
+//review validatrion 
+const validatereview = (req,res,next)=>{
+  let{error}=reviewschema.validate(req.body)
+  if(error){
+    let errormsg = error.details.map((el)=>el.message).join(",") ;
+    throw new expresserror(400,errormsg)
+  }else{
+    next();
+  }
+}
+
 
 //show route 
 app.use(express.urlencoded({ extended: true }));
@@ -120,7 +132,7 @@ app.delete('/listing/:id', async (req, res) => {
 })
 
 //revies
-app.post('/listing/:id/review', async (req,res)=>{
+app.post('/listing/:id/review', validatereview, async (req,res)=>{
  try{
   let listings = await listing.findById(req.params.id);
   let newreview = new Review(req.body.review);
