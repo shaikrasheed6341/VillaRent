@@ -1,43 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Villa Details</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Include Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            font-family: 'Arial', sans-serif;
+        }
 
-    
-    
-    <% layout("/layouts/boilerplate") %>
+        .card {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .btn {
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .btn-outline-primary {
+            border-color: #007bff;
+            color: #007bff;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        h4, h5, h6 {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        textarea {
+            resize: none;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            padding: 10px;
+            width: 100%;
+        }
+
+        .review {
+            background-color: #fff;
+            border: 1px solid #eaeaea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .review h5 {
+            margin: 0;
+        }
+
+        .review p {
+            margin: 5px 0 0;
+        }
+
+        input[type="range"] {
+            width: 100%;
+        }
+
+        .image-section {
+            margin-bottom: 30px;
+        }
+
+        .review-section {
+            margin-top: 50px;
+        }
+    </style>
+</head>
 <body>
-    
-    <div class="card mb-3" style="width: 1500px; padding: 20px; border: 2px solid #ddd; border-radius: 10px; margin-left: 50px;">
-        <!-- Added margin-left to shift the card -->
+
+<div class="container">
+    <div class="card mb-5" style="max-width: 1000px; margin: auto;">
         <div class="row g-0">
-            <div class="col-md-3 offset-md-1"> <!-- Offset added to move image to the right -->
+            <div class="col-md-5 image-section">
                 <img src="<%= list.image.url %>" 
-                     class="img-fluid rounded-start" 
+                     class="img-fluid" 
                      alt="villa image" 
-                     style="width: 100%; height: auto; object-fit: cover;"> <!-- Kept height proportional -->
+                     style="width: 100%; height: 100%; object-fit: cover;">
             </div>
-            <div class="col-md-4 offset-md-1"> <!-- Offset added to move content to the right -->
+            <div class="col-md-7">
                 <div class="card-body">
-                    <h4 class="card-title mb-1"> <!-- Added margin-bottom -->
-                        <%= list.title %>
-                    </h3>
-                    <h8 class="card-text d-block mb-2"> <!-- Added block display and margin-bottom -->
-                        <%= list.description %>
-                    </h8>
-                    <h6 class="mb-2">Location: <%= list.location %></h6> <!-- Added margin-bottom -->
-                    <h6 class="mb-2">Country: <%= list.country %></h6> <!-- Added margin-bottom -->
+                    <h4 class="card-title mb-3"><%= list.title %></h4>
+                    <p class="card-text text-muted mb-4"><%= list.description %></p>
+                    <h6 class="mb-2"><strong>Location:</strong> <%= list.location %></h6>
+                    <h6 class="mb-2"><strong>Country:</strong> <%= list.country %></h6>
                     <p class="card-text">
+                        <strong>Price:</strong>
                         <i class="fa-solid fa-indian-rupee-sign"></i> <b><%= list.price %></b>
                     </p>
-                    <button type="button" class="btn btn-success">Booknow</button>
+                    <div class="d-flex justify-content-start gap-2 mt-4">
+                        <a href="/listing/<%= list._id %>/edit" class="btn btn-outline-primary">Edit Details</a>
+                        <form action="/listing/<%= list._id %>?_method=delete" method="post">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="review-section">
+        <h4>Leave a Review</h4>
+        <form action="/listing/<%= list.id %>/review" method="post" class="mb-4">
+            <div class="mb-3">
+                <label for="rating" class="form-label">Rating</label>
+                <input type="range" min="1" max="5" name="review[rating]" class="form-range">
+            </div>
+            <div class="mb-3">
+                <label for="comments" class="form-label">Comments</label>
+                <textarea id="comments" name="review[comments]" rows="4" placeholder="Write your feedback here" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+        <hr>
+        <h4>All Reviews</h4>
+        <% if (list.review.length > 0) { %>
+            <% for (let reviews of list.review) { %>
+                <div class="review">
+                    <h5>Rating: <%= reviews.rating %> <i class="fa-solid fa-star" style="color: gold;"></i></h5>
+                    <p><%= reviews.comments %></p><br>
+                      <form method="post" action="/listing/<%= list._id  %>/review/<%= reviews._id %>?_method=delete">
+                        <button>delete</button>
+                    </form>
+                </div>
+               
+            <% } %>
+        <% } else { %>
+            <p>No reviews yet. Be the first to leave one!</p>
+        <% } %>
+    </div>
+</div>
+
+<!-- Include Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
-    
-
-    
-
-    <br><br>
-    <a href="/listing/<%= list._id %>/edit">edit the details</a><br><br>
-    <form action="/listing/<%= list._id %>?_method=delete" method="post"><button>Delete</button></form>
-</body>
+</html>
