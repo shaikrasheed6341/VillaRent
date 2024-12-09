@@ -12,16 +12,76 @@
         body {
             background-color: #f8f9fa;
             padding: 20px;
+            font-family: 'Arial', sans-serif;
         }
+
         .card {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
         }
-        a {
-            text-decoration: none;
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .btn {
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .btn-outline-primary {
+            border-color: #007bff;
             color: #007bff;
         }
-        a:hover {
-            text-decoration: underline;
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        h4, h5, h6 {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        textarea {
+            resize: none;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            padding: 10px;
+            width: 100%;
+        }
+
+        .review {
+            background-color: #fff;
+            border: 1px solid #eaeaea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .review h5 {
+            margin: 0;
+        }
+
+        .review p {
+            margin: 5px 0 0;
+        }
+
+        input[type="range"] {
+            width: 100%;
+        }
+
+        .image-section {
+            margin-bottom: 30px;
+        }
+
+        .review-section {
+            margin-top: 50px;
         }
     </style>
 </head>
@@ -30,9 +90,9 @@
 <div class="container">
     <div class="card mb-5" style="max-width: 1000px; margin: auto;">
         <div class="row g-0">
-            <div class="col-md-5">
+            <div class="col-md-5 image-section">
                 <img src="<%= list.image.url %>" 
-                     class="img-fluid rounded-start" 
+                     class="img-fluid" 
                      alt="villa image" 
                      style="width: 100%; height: 100%; object-fit: cover;">
             </div>
@@ -50,27 +110,42 @@
                         <a href="/listing/<%= list._id %>/edit" class="btn btn-outline-primary">Edit Details</a>
                         <form action="/listing/<%= list._id %>?_method=delete" method="post">
                             <button type="submit" class="btn btn-danger">Delete</button>
-                        </form><br>
-                       
+                        </form>
                     </div>
-                </div>
-                <div>
-                    <h4>leave a review</h4>
-                    <form action="/listing/<%= list.id %>/review" method="post">
-                        <div>
-                            <label for="rating">rating</label>
-                            <input type="range" min="1" max="5" name="review[rating]">
-                        </div>
-                        <div>
-                            <label >commnts</label><br>
-                            <textarea placeholder="feedback " rows="5" cols="50" name="review[commnts]" required>good</textarea>
-                        </div>
-                        <button >sudmit </button>
-
-                    </form>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="review-section">
+        <h4>Leave a Review</h4>
+        <form action="/listing/<%= list.id %>/review" method="post" class="mb-4">
+            <div class="mb-3">
+                <label for="rating" class="form-label">Rating</label>
+                <input type="range" min="1" max="5" name="review[rating]" class="form-range">
+            </div>
+            <div class="mb-3">
+                <label for="comments" class="form-label">Comments</label>
+                <textarea id="comments" name="review[comments]" rows="4" placeholder="Write your feedback here" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+        <hr>
+        <h4>All Reviews</h4>
+        <% if (list.review.length > 0) { %>
+            <% for (let reviews of list.review) { %>
+                <div class="review">
+                    <h5>Rating: <%= reviews.rating %> <i class="fa-solid fa-star" style="color: gold;"></i></h5>
+                    <p><%= reviews.comments %></p><br>
+                      <form method="post" action="/listing/<%= list._id  %>/review/<%= reviews._id %>?_method=delete">
+                        <button>delete</button>
+                    </form>
+                </div>
+               
+            <% } %>
+        <% } else { %>
+            <p>No reviews yet. Be the first to leave one!</p>
+        <% } %>
     </div>
 </div>
 

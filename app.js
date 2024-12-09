@@ -4,7 +4,6 @@ const listing = require('./models/listing')
 const path = require('path')
 const methodOverride = require('method-override')
 const ejsmate = require('ejs-mate');
-const {reviewschema} =require('./schema')
 const Review = require('./models/review');
 
 
@@ -71,23 +70,23 @@ app.get('/listing/new', (req, res) => {
   res.render('listing/new.ejs')
 })
 
-//review validatrion 
-const validatereview = (req,res,next)=>{
-  let{error}=reviewschema.validate(req.body)
-  if(error){
-    let errormsg = error.details.map((el)=>el.message).join(",") ;
-    throw new expresserror(400,errormsg)
-  }else{
-    next();
-  }
-}
+// //review validatrion 
+// const validatereview = (req,res,next)=>{
+//   let{error}=reviewschema.validate(req.body)
+//   if(error){
+//     let errormsg = error.details.map((el)=>el.message).join(",") ;
+//     throw new expresserror(400,errormsg)
+//   }else{
+//     next();
+//   }
+// }
 
 
 //show route 
 app.use(express.urlencoded({ extended: true }));
 app.get('/listing/:id', async (req, res) => {
   let { id } = req.params;
-  const list = await listing.findById(id)
+  const list = await listing.findById(id).populate("review")
   res.render('listing/show', { list })
 })
 //add newlist
@@ -132,8 +131,7 @@ app.delete('/listing/:id', async (req, res) => {
 })
 
 //revies
-app.post('/listing/:id/review', validatereview, async (req,res)=>{
- try{
+app.post('/listing/:id/review',  async (req,res)=>{
   let listings = await listing.findById(req.params.id);
   let newreview = new Review(req.body.review);
   listings.review.push(newreview)
@@ -143,9 +141,14 @@ app.post('/listing/:id/review', validatereview, async (req,res)=>{
   console.log("your listing is saved")
   res.redirect(`/listing/${listings._id}`)
  
- }  catch(err){
-  console.log(err)
- }
+ 
+})
+//reviews delet route
+app.delete('/listing/:id/review/:reviewid', async(req,res)=>{
+ let{id,reviewid}=req.params;
+ await listing.findByIdAndUpdate(id,{$pull :{review:reviewid}});
+ await Review.findById(reviewid);
+ res.redirect(`/listing/${id}`)
 })
 
 
@@ -156,14 +159,12 @@ app.post('/listing/:id/review', validatereview, async (req,res)=>{
 //    await newlisting.save()
 //    res.redirect('/listing');
 // }) 
-app.all('*', (req, res, next) => {
-  next(new expresserror(404, "page is not found "));
-})
-app.use((err, req, res, next) => {
-  let { status, message } = err;
-  res.status(status).send(message)
-
-})
+// app.use((err, req, res, next) => {
+//   const status = err.status || 500; // Default to 500 if no status is provided
+//   const message = err.message || 'Something went wrong'; // Default message if no message is provided
+//   console.error(`[Error ${status}] ${message}`); // Log the error for debugging
+//   res.status(status).send(message);
+// });
 
 
 
