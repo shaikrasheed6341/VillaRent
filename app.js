@@ -5,7 +5,8 @@ const path = require('path')
 const methodOverride = require('method-override')
 const ejsmate = require('ejs-mate');
 const Review = require('./models/review');
-
+const session = require('express-session')
+const flash = require('connect-flash')
 
 
 
@@ -23,15 +24,38 @@ async function main() {
 
 }
 
+//session
+
+const sessionfile = {
+  secret: "my secretcode",
+  resave: false,
+  saveUninitialized: true,
+  cookie :{
+    Expires:Date.now()+ 7*24*60*60*1000,
+    maxAge:7*24*60*60,
+    httpOnly:true
+
+  }
+};
+
+
+app.use(session(sessionfile))
+app.use(flash())
 
 
 
 app.set('view engine', 'ejs');
 app.set("views", path.join(__dirname, 'views'));
+ 
+
+
+
+ 
 app.use(methodOverride("_method"));
 app.engine('ejs', ejsmate);
 app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.static(path.join(__dirname, '/images')));
+
 
 
 
@@ -54,7 +78,10 @@ app.use(express.static(path.join(__dirname, '/images')));
 //     console.log(alllisting)
 //     res.render('listing/index.ejs',{alllisting})
 // })
-
+app.use((req,res,next)=>{
+  res.locals.success=req.flash("success")
+  next()
+})
 //index route
 app.get('/listing', async (req, res) => {
   try {
@@ -93,7 +120,9 @@ app.get('/listing/:id', async (req, res) => {
 app.post('/listing', async (req, res) => {
   try {
     let newlisting = new listing(req.body.listing);
+   
     await newlisting.save();
+    req.flash("success","new list added ");
     console.log(newlisting)
     res.redirect('/listing');
   } catch (error) {
