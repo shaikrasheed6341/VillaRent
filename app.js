@@ -7,6 +7,10 @@ const ejsmate = require('ejs-mate');
 const Review = require('./models/review');
 const session = require('express-session')
 const flash = require('connect-flash')
+const passport = require('passport')
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
+
 
 
 
@@ -30,58 +34,72 @@ const sessionfile = {
   secret: "my secretcode",
   resave: false,
   saveUninitialized: true,
-  cookie :{
-    Expires:Date.now()+ 7*24*60*60*1000,
-    maxAge:7*24*60*60,
-    httpOnly:true
+  cookie: {
+    Expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60,
+    httpOnly: true
 
   }
 };
 
-
+//using flash
 app.use(session(sessionfile))
 app.use(flash())
 
+//passport intilization 
+app.use(passport.initialize())
+app.use(passport.session())
+//configuration passport 
 
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.set('view engine', 'ejs');
 app.set("views", path.join(__dirname, 'views'));
- 
 
 
 
- 
+
+
 app.use(methodOverride("_method"));
 app.engine('ejs', ejsmate);
 app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.static(path.join(__dirname, '/images')));
+app.use(express.json()); // Parses JSON-encoded bodies
+app.use(express.urlencoded({ extended: true })); // Parses URL-encoded bodies (form data)
 
 
 
 
-// app.get('/testlisting', async (req, res) => {
-//   let newlisting = new listing({
-//     tittle: "hyderabad villa",
-//     description: "it  is located in hyd  ",
-//     price: 1200,
-//     location: "hyderabad",
-//     country: "india"
-
-//   });
-//   await newlisting.save();
-//   console.log("new listing was saved")
-//   res.send("your list was sucess fully saved")
-
-// })
-// app.get('/listing',async(req,res)=>{
-//     let alllisting = await listing.find({})
-//     console.log(alllisting)
-//     res.render('listing/index.ejs',{alllisting})
-// })
-app.use((req,res,next)=>{
-  res.locals.success=req.flash("success")
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success")
   next()
 })
+// //pasport route
+// app.get('/demouser', async (req, res) => {
+//   let fakeuser = new User({
+//     email: "shaikrasheed@gmail.com",
+//     username :"shaikrasheed"
+
+//   })
+//    let regerseduser = await User.register(fakeuser,"shaikraheed");
+//    res.send(regerseduser)
+// })
+//user get 
+app.get('/signup', (req,res)=>{
+  res.render('./users/signup')
+})
+app.post('/signup', async(req,res)=>{
+ let {username,email,password } =req.body;
+  const newuser = new User ({username,email})
+  let regesteruser = await User.register(newuser,password)
+  console.log(regesteruser)
+  req.flash("success", "Welcome to VillaRent");
+  res.redirect('/listing')
+
+})
+
 //index route
 app.get('/listing', async (req, res) => {
   try {
@@ -97,16 +115,6 @@ app.get('/listing/new', (req, res) => {
   res.render('listing/new.ejs')
 })
 
-// //review validatrion 
-// const validatereview = (req,res,next)=>{
-//   let{error}=reviewschema.validate(req.body)
-//   if(error){
-//     let errormsg = error.details.map((el)=>el.message).join(",") ;
-//     throw new expresserror(400,errormsg)
-//   }else{
-//     next();
-//   }
-// }
 
 
 //show route 
@@ -120,9 +128,9 @@ app.get('/listing/:id', async (req, res) => {
 app.post('/listing', async (req, res) => {
   try {
     let newlisting = new listing(req.body.listing);
-   
+
     await newlisting.save();
-    req.flash("success","new list added ");
+    req.flash("success", "new list added ");
     console.log(newlisting)
     res.redirect('/listing');
   } catch (error) {
@@ -160,7 +168,7 @@ app.delete('/listing/:id', async (req, res) => {
 })
 
 //revies
-app.post('/listing/:id/review',  async (req,res)=>{
+app.post('/listing/:id/review', async (req, res) => {
   let listings = await listing.findById(req.params.id);
   let newreview = new Review(req.body.review);
   listings.review.push(newreview)
@@ -169,31 +177,17 @@ app.post('/listing/:id/review',  async (req,res)=>{
   console.log("review was saved")
   console.log("your listing is saved")
   res.redirect(`/listing/${listings._id}`)
- 
- 
+
+
 })
 //reviews delet route
-app.delete('/listing/:id/review/:reviewid', async(req,res)=>{
- let{id,reviewid}=req.params;
- await listing.findByIdAndUpdate(id,{$pull :{review:reviewid}});
- await Review.findById(reviewid);
- res.redirect(`/listing/${id}`)
+app.delete('/listing/:id/review/:reviewid', async (req, res) => {
+  let { id, reviewid } = req.params;
+  await listing.findByIdAndUpdate(id, { $pull: { review: reviewid } });
+  await Review.findById(reviewid);
+  res.redirect(`/listing/${id}`)
 })
 
-
-//add newlist 
-//creating post request
-// app.post('/listing',async(req,res)=>{
-//   let newlisting =  new listing(req.body.listing);
-//    await newlisting.save()
-//    res.redirect('/listing');
-// }) 
-// app.use((err, req, res, next) => {
-//   const status = err.status || 500; // Default to 500 if no status is provided
-//   const message = err.message || 'Something went wrong'; // Default message if no message is provided
-//   console.error(`[Error ${status}] ${message}`); // Log the error for debugging
-//   res.status(status).send(message);
-// });
 
 
 
