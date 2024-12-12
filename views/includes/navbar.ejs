@@ -1,25 +1,37 @@
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+<nav class="navbar navbar-expand-md bg-light border-bottom sticky-top">
   <div class="container-fluid">
     <!-- Left: Logo and Navbar Links -->
-    <div class="d-flex">
-      <a class="navbar-brand me-3" href="/listing"><i class="fa-regular fa-compass"></i></a>
+    <div class="d-flex align-items-center">
+      <a class="navbar-brand me-3 text-primary" href="/listing">
+        <i class="fa-regular fa-compass fs-4"></i>
+      </a>
       <div class="navbar-nav">
-        <a class="nav-link active me-3 " aria-current="page" href="/listing">HOME</a>
-        <a class="nav-link me-3" href="/listing">VILLA LIST</a>
-        <a class="nav-link me-3" href="/listing/new">ADD NEW LIST</a>
+        <a class="nav-link active me-3 text-dark fw-bold" aria-current="page" href="/listing">HOME</a>
+        <a class="nav-link me-3 text-dark fw-bold" href="/listing">VILLA LIST</a>
+        <a class="nav-link me-3 text-dark fw-bold" href="/listing/new">ADD NEW LIST</a>
       </div>
     </div>
-    
-    <!-- Right: Search Box -->
-    <div class="d-flex ms-auto" style="width: 30%;">
-      <form class="d-flex w-100" action="/search" method="GET">
-        <input class="form-control form-control-sm" type="search" placeholder="Search Villa" aria-label="Search" name="query">
-      </form>
-    </div>
 
-    <!-- Navbar Toggle for mobile view -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <!-- Right: Signup and Login Buttons -->
+    <% if(!currentuser ){ %>
+      <div class="d-flex ms-auto">
+        <a href="/signup" class="btn btn-outline-primary me-2 fw-bold">Sign Up</a>
+        <a href="/login" class="btn btn-primary fw-bold">Login</a>
+      </div>
+      <% } %>
+        <% if(currentuser ){ %>
+          <div>
+            <button type="button" class="btn-danger">
+              <a href="/logout" class="btn lert alert-danger fw-bold  text-white">Logout</a>
+            </button>
+            
+          </div>
+          <% } %>
+
+            <!-- Navbar Toggle for mobile view -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+              aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
   </div>
 </nav>
