@@ -106,9 +106,17 @@ app.post('/signup', async (req, res) => {
     let { username, email, password } = req.body;//requiring
     const newuser = new User({ username, email })//creating new user
     let regesteruser = await User.register(newuser, password)//registermehtod  of passport
+    
     console.log(regesteruser)
-    req.flash("success", "Welcome to VillaRent");
-    res.redirect('/login')
+    req.logIn(regesteruser,(err)=>{
+      if(err){
+        next(err)
+      }
+      req.flash("sucess","welcome to villarent")
+      res.redirect('/listing')
+    })
+    // req.flash("success", "Welcome to VillaRent");
+    // res.redirect('/login')
 
   } catch (e) {
     req.flash("error", "error.e")
