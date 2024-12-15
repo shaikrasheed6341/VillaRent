@@ -1,3 +1,4 @@
+require('dotenv').config();
 //express intilization
 const express = require('express')
 //moongose intilization
@@ -14,6 +15,7 @@ const ejsmate = require('ejs-mate');
 const Review = require('./models/review');
 //requiring for session 
 const session = require('express-session')
+const MongoStore = require('connect-mongo');
 //requiring flash which is used to short message  to display
 const flash = require('connect-flash')
 //requiring passport for authication npm package
@@ -26,27 +28,46 @@ const User = require('./models/user');
 const { isloggedin } = require("./midlleware");
 const { error } = require('console');
 
+// In your main application file
+// Loads the .env.prod file for production
+
+
 
 
 
 const app = express()
 const port = 3001
+ 
+const databaseUrl = process.env.DATABASE_URL
 //mongodb conecction establishment
 main().then((res) => {
   console.log("it is connected to db")
 }).catch(err => console.log(err));
 
+//const dataurl = databaseUrl;
+
 
 async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/villarent');
+  await mongoose.connect(databaseUrl);
 
 
 }
 
 //session file which is used in middlewaer session
+const store = MongoStore.create({
+  mongoUrl:databaseUrl,
+  crypto:{
+    secret: process.env.SEC,
+  },
+  touchAfter:24*3600,
+})
+store.on("error",()=>{
+  console.log("error couurs in session store",err)
+})
 
 const sessionfile = {
-  secret: "my secretcode",
+  store,
+  secret: process.env.SEC,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -56,6 +77,7 @@ const sessionfile = {
 
   }
 };
+
 
 //using session and flash
 app.use(session(sessionfile))
