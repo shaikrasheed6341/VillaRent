@@ -94,3 +94,7 @@ This project is licensed under the MIT License. See the LICENSE file for details
 For any inquiries or feedback, feel free to reach out:
 - **Email**: shaikrasheed6341@example.com
 - **GitHub**: [your-github-shaikrasheed6341](https://github.com/your-github-shaikrasheed6341)
+
+- issues with encounter 
+- I'm having trouble deploying my project to [platform/service name]. The issue occurs during [specific stage, e.g., build, setup, runtime, etc.]. I’ve followed the deployment guide, but I keep encountering [error message, issue behavior, etc.].
+- if any buddy helpme  for deploying project fel free to reach out
