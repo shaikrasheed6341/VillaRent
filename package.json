@@ -1,6 +1,6 @@
 {
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   },
   "name": "villarent",
   "version": "1.0.0",
@@ -26,6 +26,7 @@
     "express-session": "^1.18.1",
     "joi": "^17.13.3",
     "method-override": "^3.0.0",
+    "math-intrinsics": "^1.0.0",
     "mongodb": "^5.9.0",
     "mongoose": "^7.6.0",
     "passport": "^0.7.0",
@@ -34,5 +35,13 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
+  },
+  "overrides": {
+    "get-intrinsic": {
+      "math-intrinsics": "npm:math-intrinsics@^1.0.0"
+    }
+  },
+  "resolutions": {
+    "math-intrinsics": "^1.0.0"
   }
 }
