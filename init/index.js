@@ -8,7 +8,7 @@ main().then((res) => {
   
   
   async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/villarent');
+    await mongoose.connect('mongodb+srv://shaikrasheed634:H1hSD4jntHrmztRW@cluster0.cahpons.mongodb.net/');
   
   
 }
